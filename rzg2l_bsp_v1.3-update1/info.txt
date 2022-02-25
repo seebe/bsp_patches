@@ -1,0 +1,59 @@
+# RZ/G2L BSP V1.3-update1
+
+# Set "PATCH_DIR" to the location of this file before 'sourcing' this file
+# Example:
+#  $ PATCH_DIR=/home/renesas/rzg/bsp_patches/rzg2l_bsp_v1.3-update1
+#  $ source $PATCH_DIR/info.txt
+#  $ eval $FLASH_WRITER_CMD
+#  $ eval $TFA_CMD
+#  $ eval $UBOOT_CMD
+#  $ eval $KERNEL_CMD
+
+
+#---------------------------------------
+# rzg2_flash_writer
+#---------------------------------------
+FLASH_WRITER_LABEL="rzg2l_bsp_v1.3-update1"
+FLASH_WRITER_REPO=https://github.com/renesas-rz/rzg2_flash_writer.git
+FLASH_WRITER_BRANCH="rz_g2l"
+FLASH_WRITER_COMMIT="cb40eb7529dfab5c049810ea0d59635080d7ecdb"
+FLASH_WRITER_SAME=""
+FLASH_WRITER_CMD="git clone $FLASH_WRITER_REPO ; cd rzg2_flash_writer ; git checkout -b $FLASH_WRITER_LABEL $FLASH_WRITER_COMMIT"
+
+
+#---------------------------------------
+# Trusted Firmware-ARM
+#---------------------------------------
+TFA_LABEL="rzg2l_bsp_v1.3-update1"
+TFA_REPO=https://github.com/renesas-rz/rzg_trusted-firmware-a.git
+TFA_BRANCH="v2.5/rzg2l"
+TFA_COMMIT="8e2054e9cff87b889eeea2679d0fd47faa04c195"
+TFA_SAME=""
+TFA_CMD="git clone $TFA_REPO ; cd rzg_trusted-firmware-a ; git checkout -b $TFA_LABEL $TFA_COMMIT"
+
+MBEDTLS_REPO=git://github.com/ARMmbed/mbedtls.git
+MBEDTLS_BRANCH="mbedtls-2.16"
+MBEDTLS_COMMIT="04a049bda1ceca48060b57bc4bcf5203ce591421"
+
+
+#---------------------------------------
+# u-boot
+#---------------------------------------
+UBOOT_LABEL="rzg2l_bsp_v1.3-update1"
+UBOOT_REPO="git://github.com/renesas-rz/renesas-u-boot-cip.git"
+UBOOT_BRANCH="v2020.10/rzg2l"
+UBOOT_COMMIT="35a832d08bddaf64b3dccbf364732ac7f8dfb647"
+UBOOT_SAME=""
+UBOOT_CMD="git clone $UBOOT_REPO ; cd renesas-u-boot-cip ; git checkout -b $UBOOT_LABEL $UBOOT_COMMIT"
+
+
+#---------------------------------------
+# kernel
+#---------------------------------------
+KERNEL_LABEL="rzg2l_bsp_v1.3-update1"
+KERNEL_REPO="http://github.com/renesas-rz/rz_linux-cip.git"
+KERNEL_BRANCH="rzg2l-cip41"
+KERNEL_COMMIT="c819d510b2b02511f083023bcd8d6cd41f9d003c"
+KERNEL_VERSION="xxx"
+KERNEL_SAME=""
+KERNEL_CMD="git clone $KERNEL_REPO ; cd rz_linux-cip ; git checkout -b $KERNEL_LABEL $KERNEL_COMMIT ; git am -p1 $PATCH_DIR/$KERNEL_PATCHES_1"
