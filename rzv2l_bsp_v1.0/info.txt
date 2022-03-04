@@ -10,6 +10,23 @@
 #  $ eval $KERNEL_CMD
 
 
+clone_and_branch() {
+  # $1 = REPO
+  # $2 = COMMIT
+  # $3 = LABEL
+  REPO_DIR=$(basename $1)
+  echo $REPO_DIR
+  if [ "${REPO_DIR: -4}" == ".git" ] ; then
+    REPO_DIR="${REPO_DIR::-4}"
+  fi
+  if [ ! -e $REPO_DIR ] ; then
+    git clone $1
+  fi
+  cd $REPO_DIR
+  git fetch
+  git checkout -b $2 $3
+}
+
 #---------------------------------------
 # rzg2_flash_writer
 #---------------------------------------
@@ -18,7 +35,8 @@ FLASH_WRITER_REPO=https://github.com/renesas-rz/rzg2_flash_writer.git
 FLASH_WRITER_BRANCH="rz_g2l"
 FLASH_WRITER_COMMIT="126ed36e30594869d4ecec45fc28cb15ea91c1c2"
 FLASH_WRITER_SAME=""
-FLASH_WRITER_CMD="git clone $FLASH_WRITER_REPO ; cd rzg2_flash_writer ; git checkout -b $FLASH_WRITER_LABEL $FLASH_WRITER_COMMIT"
+FLASH_WRITER_CMD="clone_and_branch $FLASH_WRITER_REPO $FLASH_WRITER_LABEL $FLASH_WRITER_COMMIT ; cd .."
+
 
 #---------------------------------------
 # Trusted Firmware-ARM
@@ -28,7 +46,7 @@ TFA_REPO=https://github.com/renesas-rz/rzg_trusted-firmware-a.git
 TFA_BRANCH="v2.5/rzg2l"
 TFA_COMMIT="4de5d6042cecbe7319d559dd8062309e53ca6e43"
 TFA_SAME=""
-TFA_CMD="git clone $TFA_REPO ; cd rzg_trusted-firmware-a ; git checkout -b $TFA_LABEL $TFA_COMMIT"
+TFA_CMD="clone_and_branch $TFA_REPO $TFA_LABEL $TFA_COMMIT ; cd .."
 
 # MBED not needed
 MBEDTLS_REPO=git://github.com/ARMmbed/mbedtls.git
@@ -44,7 +62,7 @@ UBOOT_REPO="https://github.com/renesas-rz/renesas-u-boot-cip.git"
 UBOOT_BRANCH="v2020.10/rzg2l"
 UBOOT_COMMIT="35a832d08bddaf64b3dccbf364732ac7f8dfb647"
 UBOOT_SAME=""
-UBOOT_CMD="git clone $UBOOT_REPO ; cd renesas-u-boot-cip ; git checkout -b $UBOOT_LABEL $UBOOT_COMMIT"
+UBOOT_CMD="clone_and_branch $UBOOT_REPO $UBOOT_LABEL $UBOOT_COMMIT ; cd .."
 
 
 #---------------------------------------
@@ -58,5 +76,5 @@ KERNEL_VERSION="4.19.165"
 KERNEL_SAME=""
 KERNEL_PATCHES_1=rz_linux-cip/patches/main/*.patch
 KERNEL_PATCHES_2=rz_linux-cip/patches/rzv2l/*.patch
-KERNEL_CMD="git clone $KERNEL_REPO ; cd rz_linux-cip ; git checkout -b $KERNEL_LABEL $KERNEL_COMMIT ; git am -p1 $PATCH_DIR/$KERNEL_PATCHES_1 ; patch -p1 -i $PATCH_DIR/$KERNEL_PATCHES_2"
+KERNEL_CMD="clone_and_branch $KERNEL_REPO $KERNEL_LABEL $KERNEL_COMMIT ; git am -p1 $PATCH_DIR/$KERNEL_PATCHES_1 ; patch -p1 -i $PATCH_DIR/$KERNEL_PATCHES_2 ; cd .."
 
