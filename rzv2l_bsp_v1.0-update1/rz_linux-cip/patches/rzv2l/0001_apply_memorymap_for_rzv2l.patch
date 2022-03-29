@@ -1,3 +1,9 @@
+From: renesas-rz@renesas.com
+Date: Sun, 31 Oct 2022 08:00:00 -0400
+Subject: 0001_apply_memorymap_for_rzv2l
+
+0001_apply_memorymap_for_rzv2l.patch
+---
 diff --git a/arch/arm64/boot/dts/renesas/r9a07g054l2-dev.dts b/arch/arm64/boot/dts/renesas/r9a07g054l2-dev.dts
 index ce048c6..3f653a2 100755
 --- a/arch/arm64/boot/dts/renesas/r9a07g054l2-dev.dts
@@ -7,13 +13,13 @@ index ce048c6..3f653a2 100755
  			reg = <0x00000000 0x68000000 0x0 0x8000000>;
  		};
 -	};
-+		
++
 +		/* device specific region for contiguous allocations */
 +		drp_reserved: DRP-AI {
 +			reusable;
 +			reg = <0x0 0x70000000 0x0 0x10000000>;
 +		};
- 
+
 +		image_buf0: image_buf@0 {
 +			compatible = "shared-dma-pool";
 +			reusable;
@@ -21,7 +27,7 @@ index ce048c6..3f653a2 100755
 +			label = "image_buf0";
 +		};
 +	};
-+	
++
  	mmngr {
  		compatible = "renesas,mmngr";
  		memory-region = <&mmp_reserved>;
@@ -34,13 +40,13 @@ index ea6655e..ce839bf 100755
  			reg = <0x00000000 0x68000000 0x0 0x8000000>;
  		};
 -
-+		
++
  		/* device specific region for contiguous allocations */
  		drp_reserved: DRP-AI {
  			reusable;
  			reg = <0x0 0x70000000 0x0 0x10000000>;
  		};
- 
+
 -		v4l2_reserved: v4l2-DRP_buf@0 {
 +		image_buf0: image_buf@0 {
  			compatible = "shared-dma-pool";

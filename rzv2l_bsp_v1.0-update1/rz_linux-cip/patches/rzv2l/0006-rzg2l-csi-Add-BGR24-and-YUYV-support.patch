@@ -1,3 +1,9 @@
+From: renesas-rz@renesas.com
+Date: Tue, 01 Mar 2022 08:00:00 -0400
+Subject: 0006-rzg2l-csi-Add-BGR24-and-YUYV-support
+
+0006-rzg2l-csi-Add-BGR24-and-YUYV-support.patch
+---
 diff --git a/drivers/media/platform/rzg2l-cru/rzg2l-csi2.c b/drivers/media/platform/rzg2l-cru/rzg2l-csi2.c
 index 9577637..2bb7832 100755
 --- a/drivers/media/platform/rzg2l-cru/rzg2l-csi2.c

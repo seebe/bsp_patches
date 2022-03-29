@@ -27,6 +27,41 @@ clone_and_branch() {
   git checkout -b $2 $3
 }
 
+apply_patches() {
+  # $1 = Directory containing the patches
+
+  # Some patches are just diff, so turn them into mailbox patches
+  # so we can apply them with 'git am'
+  # We check by seeing if the first line of the file has "diff --git"
+  for file in $1/*.patch ; do
+    filename=$(basename $file)
+    echo $filename
+    LINE=`grep --line-number --max-count=1 "diff --git" $file | sed 's/:.*//'`
+    if [ "$LINE" != "1" ] ; then
+      # This file is a mailbox file, so git am can be used
+      git am $file
+      continue
+    fi
+
+    # Assume it is a diff file, so it need a mailbox header
+    # Make a copy of the file, then modify it
+    cp $file /tmp/$filename
+    tmp_file=/tmp/$filename
+
+    # Add in git git mailbox header at begining of file
+    SUBJECT=${filename::-6}
+    sed -i "1 i\From: rz@renesas.com" $tmp_file
+    sed -i "2 i\Date: $(date -R)" $tmp_file
+    sed -i "3 i\Subject: $SUBJECT" $tmp_file
+    sed -i "4 i\ " $tmp_file
+    sed -i "5 i\ $filename" $tmp_file
+    sed -i "6 i\---" $tmp_file
+
+    git am $tmp_file
+  done
+}
+
+
 #---------------------------------------
 # rzg2_flash_writer
 #---------------------------------------
@@ -35,7 +70,7 @@ FLASH_WRITER_REPO=https://github.com/renesas-rz/rzg2_flash_writer.git
 FLASH_WRITER_BRANCH="rz_g2l"
 FLASH_WRITER_COMMIT="126ed36e30594869d4ecec45fc28cb15ea91c1c2"
 FLASH_WRITER_SAME=""
-FLASH_WRITER_CMD="clone_and_branch $FLASH_WRITER_REPO $FLASH_WRITER_LABEL $FLASH_WRITER_COMMIT ; cd .."FLASH_WRITER_CMD="clone_and_branch $FLASH_WRITER_REPO $FLASH_WRITER_LABEL $FLASH_WRITER_COMMIT ; cd .."
+FLASH_WRITER_CMD="clone_and_branch $FLASH_WRITER_REPO $FLASH_WRITER_LABEL $FLASH_WRITER_COMMIT ; cd .."
 
 
 #---------------------------------------
@@ -74,7 +109,7 @@ KERNEL_BRANCH="rzv2l-cip41"
 KERNEL_COMMIT="07d53b7cf74666d76060d2dc655fa957746edcd6"
 KERNEL_VERSION="4.19.165"
 KERNEL_SAME=""
-KERNEL_PATCHES_1=rz_linux-cip/patches/main/*.patch
-KERNEL_PATCHES_2=rz_linux-cip/patches/rzv2l/*.patch
-KERNEL_CMD="git clone $KERNEL_REPO ; cd rz_linux-cip ; git fetch ; git checkout -b $KERNEL_LABEL $KERNEL_COMMIT ; git am -p1 $PATCH_DIR/$KERNEL_PATCHES_1 ; patch -p1 -i $PATCH_DIR/$KERNEL_PATCHES_2 ; cd .."
+KERNEL_PATCHES_1=rz_linux-cip/patches/main
+KERNEL_PATCHES_2=rz_linux-cip/patches/rzv2l
+KERNEL_CMD="clone_and_branch $KERNEL_REPO $KERNEL_LABEL $KERNEL_COMMIT ; apply_patches $PATCH_DIR/$KERNEL_PATCHES_1 ; apply_patches $PATCH_DIR/$KERNEL_PATCHES_2 ; cd .."
 

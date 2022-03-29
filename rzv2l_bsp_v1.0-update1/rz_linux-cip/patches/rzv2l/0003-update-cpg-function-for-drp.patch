@@ -1,14 +1,20 @@
+From: renesas-rz@renesas.com
+Date: Tue, 01 Mar 2022 08:00:00 -0400
+Subject: 0003-update-cpg-function-for-drp
+
+0003-update-cpg-function-for-drp.patch
+---
 diff --git a/drivers/clk/renesas/r9a07g054l-cpg.c b/drivers/clk/renesas/r9a07g054l-cpg.c
 index db74e9e..1e6bc91 100755
 --- a/drivers/clk/renesas/r9a07g054l-cpg.c
 +++ b/drivers/clk/renesas/r9a07g054l-cpg.c
 @@ -20,7 +20,7 @@
- 
+
  enum clk_ids {
  	/* Core Clock Outputs exported to DT */
 -	LAST_DT_CORE_CLK = R9A07G054L_OSCCLK,
 +	LAST_DT_CORE_CLK = R9A07G054L_CLK_DRP,
- 
+
  	/* External Input Clocks */
  	CLK_XINCLK,
 @@ -252,6 +252,7 @@ static const struct cpg_core_clk r9a07g054l_core_clks[] __initconst = {
@@ -17,7 +23,7 @@ index db74e9e..1e6bc91 100755
  	DEF_FIXED("AT", R9A07G054L_CLK_AT, CLK800FIX_CD, 1, 2),
 +	DEF_FIXED("DRP", R9A07G054L_CLK_DRP, CLK_PLL3_1, 1, 5),
  };
- 
+
  static struct mssr_mod_clk r9a07g054l_mod_clks[] = {
 @@ -426,6 +427,22 @@ static struct mssr_mod_clk r9a07g054l_mod_clks[] = {
  	DEF_MOD("csi2",		R9A07G054L_CLK_CSI2,
@@ -40,7 +46,7 @@ index db74e9e..1e6bc91 100755
 +				MSSR(58, BIT(4), BIT(4))),
 +
  };
- 
+
  static const unsigned int r9a07g054l_crit_mod_clks[] __initconst = {
 @@ -444,5 +461,5 @@ const struct cpg_mssr_info r9a07g054l_cpg_info = {
  	/* Module clk */
@@ -60,9 +66,9 @@ index c58b534..d93e4c0 100755
 +#define R9A07G054L_CLK_DRP		22
 +
 +
- 
+
  /* r9a07g054l Module Clocks */
- 
+
 @@ -86,5 +89,10 @@
  #define R9A07G054L_CLK_MIPI_DSI_V	51
  #define R9A07G054L_CLK_MIPI_DSI_PIN	52
@@ -72,5 +78,5 @@ index c58b534..d93e4c0 100755
 +#define R9A07G054L_CLK_DRP_MCLK			56
 +#define R9A07G054L_CLK_DRP_DCLKIN		57
 +#define R9A07G054L_CLK_DRP_ACLK			58
- 
+
  #endif /* __DT_BINDINGS_CLOCK_R9A07G054L_CPG_H__ */
