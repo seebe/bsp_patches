@@ -76,5 +76,5 @@ KERNEL_VERSION="4.19.165"
 KERNEL_SAME=""
 KERNEL_PATCHES_1=rz_linux-cip/patches/main/*.patch
 KERNEL_PATCHES_2=rz_linux-cip/patches/rzv2l/*.patch
-KERNEL_CMD="clone_and_branch $KERNEL_REPO $KERNEL_LABEL $KERNEL_COMMIT ; git am -p1 $PATCH_DIR/$KERNEL_PATCHES_1 ; patch -p1 -i $PATCH_DIR/$KERNEL_PATCHES_2 ; cd .."
+KERNEL_CMD="clone_and_branch $KERNEL_REPO $KERNEL_LABEL $KERNEL_COMMIT ; git am -p1 $PATCH_DIR/$KERNEL_PATCHES_1 ; git am -p1 -i $PATCH_DIR/$KERNEL_PATCHES_2 ; cd .."
 
