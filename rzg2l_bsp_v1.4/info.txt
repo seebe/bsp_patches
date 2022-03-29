@@ -1,0 +1,114 @@
+# RZ/G2L BSP V1.4
+
+# Set "PATCH_DIR" to the location of this file before 'sourcing' this file
+# Example:
+#  $ PATCH_DIR=/home/renesas/rzg/bsp_patches/rzg2l_bsp_v1.4
+#  $ source $PATCH_DIR/info.txt
+#  $ eval $FLASH_WRITER_CMD
+#  $ eval $TFA_CMD
+#  $ eval $UBOOT_CMD
+#  $ eval $KERNEL_CMD
+
+
+clone_and_branch() {
+  # $1 = REPO
+  # $2 = LABEL
+  # $3 = COMMIT
+  REPO_DIR=$(basename $1)
+  echo $REPO_DIR
+  if [ "${REPO_DIR: -4}" == ".git" ] ; then
+    REPO_DIR="${REPO_DIR::-4}"
+  fi
+  if [ ! -e $REPO_DIR ] ; then
+    git clone $1
+  fi
+  cd $REPO_DIR
+  git fetch
+  git checkout -b $2 $3
+}
+
+apply_patches() {
+  # $1 = Directory containing the patches
+
+  # Some patches are just diff, so turn them into mailbox patches
+  # so we can apply them with 'git am'
+  # We check by seeing if the first line of the file has "diff --git"
+  for file in $1/*.patch ; do
+    filename=$(basename $file)
+    echo $filename
+    LINE=`grep --line-number --max-count=1 "diff --git" $file | sed 's/:.*//'`
+    if [ "$LINE" != "1" ] ; then
+      # This file is a mailbox file, so git am can be used
+      git am $file
+      continue
+    fi
+
+    # Assume it is a diff file, so it need a mailbox header
+    # Make a copy of the file, then modify it
+    cp $file /tmp/$filename
+    tmp_file=/tmp/$filename
+
+    # Add in git git mailbox header at begining of file
+    SUBJECT=${filename::-6}
+    sed -i "1 i\From: rz@renesas.com" $tmp_file
+    sed -i "2 i\Date: $(date -R)" $tmp_file
+    sed -i "3 i\Subject: $SUBJECT" $tmp_file
+    sed -i "4 i\ " $tmp_file
+    sed -i "5 i\ $filename" $tmp_file
+    sed -i "6 i\---" $tmp_file
+
+    git am $tmp_file
+  done
+}
+
+
+#---------------------------------------
+# rzg2_flash_writer
+#---------------------------------------
+FLASH_WRITER_LABEL="rzg2l_bsp_v1.4"
+FLASH_WRITER_REPO=https://github.com/renesas-rz/rzg2_flash_writer.git
+FLASH_WRITER_BRANCH="rz_g2l"
+FLASH_WRITER_COMMIT="4168466783f06fa7f2aa5782c597803a6882ed2f"
+FLASH_WRITER_SAME=""
+FLASH_WRITER_CMD="clone_and_branch $FLASH_WRITER_REPO $FLASH_WRITER_LABEL $FLASH_WRITER_COMMIT ; cd .."
+
+
+#---------------------------------------
+# Trusted Firmware-ARM
+#---------------------------------------
+TFA_LABEL="rzg2l_bsp_v1.4"
+TFA_REPO=https://github.com/renesas-rz/rzg_trusted-firmware-a.git
+TFA_BRANCH="v2.5/rzg2l"
+TFA_COMMIT="1939ffd728e1af90fd76b083ee471feef9128db6"
+TFA_SAME=""
+TFA_CMD="clone_and_branch $TFA_REPO $TFA_LABEL $TFA_COMMIT ; cd .."
+
+# MBED not needed
+MBEDTLS_REPO=git://github.com/ARMmbed/mbedtls.git
+MBEDTLS_BRANCH="mbedtls-2.16"
+MBEDTLS_COMMIT="04a049bda1ceca48060b57bc4bcf5203ce591421"
+
+
+#---------------------------------------
+# u-boot
+#---------------------------------------
+UBOOT_LABEL="rzg2l_bsp_v1.4"
+UBOOT_REPO="https://github.com/renesas-rz/renesas-u-boot-cip.git"
+UBOOT_BRANCH="v2020.10/rzg2l"
+UBOOT_COMMIT="0767c36bea79f82c27e4efd3f3d11670c81741b0"
+UBOOT_SAME=""
+UBOOT_CMD="clone_and_branch $UBOOT_REPO $UBOOT_LABEL $UBOOT_COMMIT ; cd .."
+
+
+#---------------------------------------
+# kernel
+#---------------------------------------
+KERNEL_LABEL="rzg2l_bsp_v1.4"
+KERNEL_REPO="https://github.com/renesas-rz/rz_linux-cip.git"
+KERNEL_BRANCH="rzg2l-cip54"
+KERNEL_COMMIT="5757ca3b1fffda38c514ae1aa4d7561c16e77cba"
+KERNEL_VERSION="4.19.198"
+KERNEL_SAME=""
+KERNEL_PATCHES_1=rz_linux-cip/patches
+KERNEL_CMD="clone_and_branch $KERNEL_REPO $KERNEL_LABEL $KERNEL_COMMIT ; apply_patches $PATCH_DIR/$KERNEL_PATCHES_1 ; cd .."
+
