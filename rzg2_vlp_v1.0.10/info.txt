@@ -46,11 +46,10 @@ TFA_REPO=https://github.com/renesas-rz/rzg_trusted-firmware-a.git
 TFA_BRANCH="v2.5/rzg2"
 TFA_COMMIT="afdf8061f1192ed31900cdcfca8a08bc3e70f206"
 TFA_SAME=""
-TFA_CMD="clone_and_branch $TFA_REPO $TFA_LABEL $TFA_COMMIT ; cd .."
-
 MBEDTLS_REPO=https://github.com/ARMmbed/mbedtls.git
 MBEDTLS_BRANCH="mbedtls-2.16"
 MBEDTLS_COMMIT="04a049bda1ceca48060b57bc4bcf5203ce591421"
+TFA_CMD="clone_and_branch $TFA_REPO $TFA_LABEL $TFA_COMMIT ; cd .. ; clone_and_branch $MBEDTLS_REPO $TFA_LABEL $MBEDTLS_COMMIT ; cd .."
 
 
 #---------------------------------------
