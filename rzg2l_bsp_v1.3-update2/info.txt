@@ -50,7 +50,7 @@ TFA_SAME=""
 TFA_CMD="clone_and_branch $TFA_REPO $TFA_LABEL $TFA_COMMIT ; cd .."
 
 # MBED not needed
-MBEDTLS_REPO=git://github.com/ARMmbed/mbedtls.git
+MBEDTLS_REPO=https://github.com/ARMmbed/mbedtls.git
 MBEDTLS_BRANCH="mbedtls-2.16"
 MBEDTLS_COMMIT="04a049bda1ceca48060b57bc4bcf5203ce591421"
 
@@ -59,7 +59,7 @@ MBEDTLS_COMMIT="04a049bda1ceca48060b57bc4bcf5203ce591421"
 # u-boot
 #---------------------------------------
 UBOOT_LABEL="rzg2l_bsp_v1.3-update2"
-UBOOT_REPO="git://github.com/renesas-rz/renesas-u-boot-cip.git"
+UBOOT_REPO="https://github.com/renesas-rz/renesas-u-boot-cip.git"
 UBOOT_BRANCH="v2020.10/rzg2l"
 UBOOT_COMMIT="c12017179a8ca11d38486f1ace08d52a489056d0"
 UBOOT_SAME=""

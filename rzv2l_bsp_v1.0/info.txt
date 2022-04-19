@@ -49,7 +49,7 @@ TFA_SAME=""
 TFA_CMD="clone_and_branch $TFA_REPO $TFA_LABEL $TFA_COMMIT ; cd .."
 
 # MBED not needed
-MBEDTLS_REPO=git://github.com/ARMmbed/mbedtls.git
+MBEDTLS_REPO=https://github.com/ARMmbed/mbedtls.git
 MBEDTLS_BRANCH="mbedtls-2.16"
 MBEDTLS_COMMIT="04a049bda1ceca48060b57bc4bcf5203ce591421"
 
