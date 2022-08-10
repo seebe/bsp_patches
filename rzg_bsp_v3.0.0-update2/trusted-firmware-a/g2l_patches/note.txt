@@ -1,0 +1,4 @@
+I renamed
+	0001-Added-code-to-explicitly-initialize-the-divider-of-P.patch
+to
+	0002-Added-code-to-explicitly-initialize-the-divider-of-P.patch

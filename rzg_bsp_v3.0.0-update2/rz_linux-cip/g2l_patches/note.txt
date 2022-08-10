@@ -1,0 +1,4 @@
+I renamed
+	0001-clk-renesas-rzg2l-Fix-reset-status-function.patch
+to
+	0002-clk-renesas-rzg2l-Fix-reset-status-function.patch
