@@ -16,10 +16,13 @@ cd rzg2_bsp_scripts/build_scripts
 git clone https://github.com/seebe/bsp_patches
 
 # Choose a BSP release and set PATCH_DIR to that sub-directory
+# For example:
 PATCH_DIR=$(pwd)/bsp_patches/rzg2_vlp_v1.0.10
 
-# Copy/paste the commands in info.txt in the directory (they are listed below)
-
+# Copy/paste the commands at the top of the info.txt in the directory.
+# Note that the commands change for each file, so copy from the info.txt file
+# in the directory you picked.
+#For example:
 source $PATCH_DIR/info.txt
 eval $FLASH_WRITER_CMD
 eval $TFA_CMD
